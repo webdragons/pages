@@ -1,0 +1,32 @@
+{
+  "name": "bulldozer/pages",
+  "description": "Pages module",
+  "type": "yii2-extension",
+  "authors": [
+    {
+      "name": "lan143",
+      "email": "lan143@lan143.ru"
+    }
+  ],
+  "require": {
+    "bulldozer/bulldozer": "*",
+    "bulldozer/users": "*",
+    "yii2mod/yii2-enum": "*",
+    "yiisoft/yii2-bootstrap": "~2.0.0",
+    "yiisoft/yii2-swiftmailer": "~2.0.0",
+    "creocoder/yii2-nested-sets": "0.9.*",
+    "himiklab/yii2-sitemap-module": "^1.2",
+    "2amigos/yii2-ckeditor-widget": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "bulldozer\\pages\\": "src"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
+}
