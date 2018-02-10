@@ -31,7 +31,7 @@ class PagesService
             $sort = 100;
             $lastPage = Page::find()->orderBy(['sort' => SORT_DESC])->one();
             if ($lastPage) {
-                $sort = $lastPage->sort;
+                $sort = $lastPage->sort + 100;
             }
 
             /** @var PageForm $model */

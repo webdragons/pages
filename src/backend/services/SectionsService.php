@@ -19,12 +19,16 @@ class SectionsService
      * @return SectionForm
      * @throws \yii\base\InvalidConfigException
      */
-    public function getForm(int $parentId, ?Section $section = null): SectionForm
+    public function getForm(int $parentId = 0, ?Section $section = null): SectionForm
     {
         if ($section) {
+            $parent = $section->parents(1)->one();
+
             /** @var SectionForm $model */
             $model = App::createObject([
                 'class' => SectionForm::class,
+                'section' => $section,
+                'parent_id' => $parent ? $parent->id : 0,
             ]);
 
             $model->setAttributes($section->getAttributes($model->getSavedAttributes()));
@@ -32,7 +36,7 @@ class SectionsService
             $sort = 100;
             $lastSection = Section::find()->orderBy(['sort' => SORT_DESC])->one();
             if ($lastSection) {
-                $sort = $lastSection->sort;
+                $sort = $lastSection->sort + 100;
             }
 
             /** @var SectionForm $model */
@@ -40,6 +44,9 @@ class SectionsService
                 'class' => SectionForm::class,
                 'parent_id' => $parentId,
                 'sort' => $sort,
+                'section' => App::createObject([
+                    'class' => Section::class,
+                ])
             ]);
         }
 

@@ -5,6 +5,7 @@ namespace bulldozer\pages\backend\forms;
 use bulldozer\pages\common\ar\Section;
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class SectionForm
@@ -38,6 +39,11 @@ class SectionForm extends Model
     public $slug;
 
     /**
+     * @var Section
+     */
+    private $section;
+
+    /**
      * @inheritdoc
      */
     public function rules(): array
@@ -64,19 +70,19 @@ class SectionForm extends Model
     public function parentValidator($attribute, $params, $validator)
     {
         if ($this->$attribute !== null) {
-            $section_ids = Section::find()->select('id')->asArray()->column();
+            $section_ids = ArrayHelper::merge([0], Section::find()->select('id')->asArray()->column());
 
             if (!in_array($this->$attribute, $section_ids)) {
                 $this->addError($attribute, Yii::t('pages', 'Section not found'));
             }
 
-            $child_section_ids = $this->_section->children()->select('id')->asArray()->column();
+            $child_section_ids = $this->section->children()->select('id')->asArray()->column();
 
             if (in_array($this->$attribute, $child_section_ids)) {
                 $this->addError($attribute, Yii::t('pages', 'You can not move a section to a child'));
             }
 
-            if ($this->$attribute == $this->_section->id) {
+            if ($this->$attribute == $this->section->id) {
                 $this->addError($attribute, Yii::t('pages', 'You can not transfer the partition to itself'));
             }
         }
@@ -105,5 +111,13 @@ class SectionForm extends Model
             'active',
             'sort',
         ];
+    }
+
+    /**
+     * @param Section $section
+     */
+    public function setSection(Section $section): void
+    {
+        $this->section = $section;
     }
 }

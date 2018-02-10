@@ -138,11 +138,11 @@ class SectionsController extends Controller
      * @throws \yii\base\InvalidConfigException
      * @throws \bulldozer\pages\backend\services\SectionSaveException
      */
-    public function actionCreate(int $parent_id = null)
+    public function actionCreate(int $parent_id = 0)
     {
         $parentSection = null;
 
-        if ($parent_id !== null) {
+        if ($parent_id !== 0) {
             $parentSection = Section::findOne($parent_id);
 
             if ($parentSection === null) {
