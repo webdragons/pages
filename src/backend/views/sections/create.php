@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
  * @var \bulldozer\pages\common\ar\Section $parentSection
  * @var array $sections
  * @var \bulldozer\pages\backend\forms\SectionForm $model
+ * @var \bulldozer\seo\backend\services\SeoService $seoService
  */
 
 $this->title = Yii::t('pages', 'Create section');
@@ -33,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </header>
 
             <div class="panel-body">
-                <?= $this->render('_form', ['model' => $model, 'isNew' => true, 'sections' => $sections]) ?>
+                <?= $this->render('_form', ['model' => $model, 'isNew' => true, 'sections' => $sections, 'seoService' => $seoService]) ?>
             </div>
         </section>
     </div>

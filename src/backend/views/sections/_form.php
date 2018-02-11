@@ -1,10 +1,13 @@
 <?php
+
 /**
  * @var \bulldozer\pages\backend\forms\SectionForm $model
  * @var array $sections
  * @var bool $isNew
+ * @var \bulldozer\seo\backend\services\SeoService $seoService
  */
 
+use bulldozer\seo\backend\widgets\SeoUpdateWidget;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
@@ -26,6 +29,16 @@ use yii\bootstrap\Html;
 <?= $form->field($model, 'active')->checkbox() ?>
 
 <?= $form->field($model, 'sort')->textInput() ?>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#seo" aria-controls="home" role="tab" data-toggle="tab">SEO</a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="seo">
+        <?= SeoUpdateWidget::widget(['seoService' => $seoService, 'form' => $form]) ?>
+    </div>
+</div>
 
 <div class="form-group">
     <?= Html::submitButton($isNew ? Yii::t('pages', 'Create') : Yii::t('pages', 'Update'),

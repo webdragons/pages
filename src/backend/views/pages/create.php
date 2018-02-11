@@ -7,6 +7,7 @@ use yii\helpers\Html;
  * @var \bulldozer\pages\backend\forms\PageForm $model
  * @var \bulldozer\pages\common\ar\Section $section
  * @var array $sections
+ * @var \bulldozer\seo\backend\services\SeoService $seoService
  */
 
 $this->title = Yii::t('pages', 'Create page');
@@ -33,7 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </header>
 
             <div class="panel-body">
-                <?= $this->render('_form', ['model' => $model, 'isNew' => true, 'sections' => $sections]) ?>
+                <?= $this->render('_form', ['model' => $model, 'isNew' => true, 'sections' => $sections,
+                    'seoService' => $seoService
+                ]) ?>
             </div>
         </section>
     </div>

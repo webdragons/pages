@@ -6,6 +6,7 @@ use bulldozer\App;
 use bulldozer\pages\backend\services\SectionsService;
 use bulldozer\pages\common\ar\Page;
 use bulldozer\pages\common\ar\Section;
+use bulldozer\seo\backend\services\SeoService;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -25,17 +26,24 @@ class SectionsController extends Controller
     private $sectionsService;
 
     /**
+     * @var SeoService
+     */
+    private $seoService;
+
+    /**
      * SectionsController constructor.
      * @param string $id
      * @param $module
      * @param SectionsService $sectionsService
+     * @param SeoService $seoService
      * @param array $config
      */
-    public function __construct(string $id, $module, SectionsService $sectionsService, array $config = [])
+    public function __construct(string $id, $module, SectionsService $sectionsService, SeoService $seoService, array $config = [])
     {
         parent::__construct($id, $module, $config);
 
         $this->sectionsService = $sectionsService;
+        $this->seoService = $seoService;
     }
 
     /**
@@ -151,9 +159,12 @@ class SectionsController extends Controller
         }
 
         $model = $this->sectionsService->getForm($parent_id);
+        $seoForm = $this->seoService->getForm();
 
-        if ($model->load(App::$app->request->post()) && $model->validate()) {
+        if ($model->load(App::$app->request->post()) && $model->validate() && $seoForm->load(App::$app->request->post()) && $seoForm->validate()) {
             $section = $this->sectionsService->save($model);
+            $this->seoService->save($section);
+
             App::$app->getSession()->setFlash('success', Yii::t('pages', 'Section successful created'));
 
             return $this->redirect(['view', 'id' => $section->id]);
@@ -163,6 +174,7 @@ class SectionsController extends Controller
             'model' => $model,
             'parentSection' => $parentSection,
             'sections' => $this->sectionsService->getSectionsTree(),
+            'seoService' => $this->seoService,
         ]);
     }
 
@@ -183,8 +195,13 @@ class SectionsController extends Controller
 
         $model = $this->sectionsService->getForm(0, $section);
 
-        if ($model->load(App::$app->request->post()) && $model->validate()) {
+        $this->seoService->load($section);
+        $seoForm = $this->seoService->getForm();
+
+        if ($model->load(App::$app->request->post()) && $model->validate() && $seoForm->load(App::$app->request->post()) && $seoForm->validate()) {
             $section = $this->sectionsService->save($model, $section);
+            $this->seoService->save($section);
+
             App::$app->getSession()->setFlash('success', Yii::t('pages', 'Section successful updated'));
 
             return $this->redirect(['view', 'id' => $section->id]);
@@ -194,6 +211,7 @@ class SectionsController extends Controller
             'model' => $model,
             'section' => $section,
             'sections' => $this->sectionsService->getSectionsTree(),
+            'seoService' => $this->seoService,
         ]);
     }
 

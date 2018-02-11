@@ -8,6 +8,7 @@ use yii\helpers\Html;
  * @var \bulldozer\pages\common\ar\Section $section
  * @var \bulldozer\pages\common\ar\Section[] $sections
  * @var string $seoWidget
+ * @var \bulldozer\seo\backend\services\SeoService $seoService
  */
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('pages', 'Pages'), 'url' => ['index']];
@@ -37,7 +38,9 @@ $this->title = Yii::t('pages', 'Update page: {name}', ['name' => $model->name]);
             </header>
 
             <div class="panel-body">
-                <?= $this->render('_form', ['model' => $model, 'isNew' => false, 'sections' => $sections]) ?>
+                <?= $this->render('_form', ['model' => $model, 'isNew' => false, 'sections' => $sections,
+                    'seoService' => $seoService
+                ]) ?>
             </div>
         </section>
     </div>

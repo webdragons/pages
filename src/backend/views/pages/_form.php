@@ -5,8 +5,10 @@
  * @var \bulldozer\pages\backend\forms\PageForm $model
  * @var bool $isNew
  * @var array $sections
+ * @var \bulldozer\seo\backend\services\SeoService $seoService
  */
 
+use bulldozer\seo\backend\widgets\SeoUpdateWidget;
 use dosamigos\ckeditor\CKEditor;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
@@ -33,6 +35,16 @@ use yii\bootstrap\Html;
 <?= $form->field($model, 'body')->widget(CKEditor::className(), [
     'options' => ['rows' => 12],
 ]) ?>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#seo" aria-controls="home" role="tab" data-toggle="tab">SEO</a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="seo">
+        <?= SeoUpdateWidget::widget(['seoService' => $seoService, 'form' => $form]) ?>
+    </div>
+</div>
 
 <div class="form-group">
     <?= Html::submitButton($isNew ? Yii::t('pages', 'Create') : Yii::t('pages', 'Update'),

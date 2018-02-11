@@ -5,6 +5,7 @@
  * @var \bulldozer\pages\frontend\ar\Section $section
  * @var \bulldozer\pages\frontend\ar\Section[] $sections
  * @var \bulldozer\pages\frontend\ar\Page[] $pages
+ * @var \bulldozer\seo\frontend\services\SeoService $seoService
  */
 
 if ($section !== null) {
@@ -17,7 +18,7 @@ if ($section !== null) {
 ?>
 <div>
     <?php if ($section !== null): ?>
-        <h1 class="page-title"><?= $section->name ?></h1>
+        <h1 class="page-title"><?= $seoService->getH1() ?></h1>
     <?php endif ?>
 
     <?php if (count($sections) > 0): ?>
@@ -42,5 +43,10 @@ if ($section !== null) {
                 </div>
             </div>
         <?php endforeach ?>
+    <?php endif ?>
+
+    <?php if (strlen($seoService->getSeoText())): ?>
+        <hr>
+        <?= $seoService->getSeoText() ?>
     <?php endif ?>
 </div>

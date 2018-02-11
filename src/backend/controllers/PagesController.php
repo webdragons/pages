@@ -7,6 +7,7 @@ use bulldozer\pages\backend\services\PagesService;
 use bulldozer\pages\backend\services\SectionsService;
 use bulldozer\pages\common\ar\Page;
 use bulldozer\pages\common\ar\Section;
+use bulldozer\seo\backend\services\SeoService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -30,19 +31,32 @@ class PagesController extends Controller
     private $pagesService;
 
     /**
+     * @var SeoService
+     */
+    private $seoService;
+
+    /**
      * PagesController constructor.
      * @param string $id
      * @param $module
      * @param SectionsService $sectionsService
      * @param PagesService $pagesService
+     * @param SeoService $seoService
      * @param array $config
      */
-    public function __construct(string $id, $module, SectionsService $sectionsService, PagesService $pagesService, array $config = [])
-    {
+    public function __construct(
+        string $id,
+        $module,
+        SectionsService $sectionsService,
+        PagesService $pagesService,
+        SeoService $seoService,
+        array $config = []
+    ) {
         parent::__construct($id, $module, $config);
 
         $this->sectionsService = $sectionsService;
         $this->pagesService = $pagesService;
+        $this->seoService = $seoService;
     }
 
     /**
@@ -93,9 +107,12 @@ class PagesController extends Controller
         }
 
         $model = $this->pagesService->getForm($parent_id);
+        $seoForm = $this->seoService->getForm();
 
-        if ($model->load(App::$app->request->post()) && $model->validate()) {
+        if ($model->load(App::$app->request->post()) && $model->validate() && $seoForm->load(App::$app->request->post()) && $seoForm->validate()) {
             $page = $this->pagesService->save($model);
+            $this->seoService->save($page);
+
             App::$app->getSession()->setFlash('success', Yii::t('pages', 'Page successful created'));
 
             if ($page->section_id != 0) {
@@ -109,6 +126,7 @@ class PagesController extends Controller
             'model' => $model,
             'section' => $section,
             'sections' => $this->sectionsService->getSectionsTree(),
+            'seoService' => $this->seoService,
         ]);
     }
 
@@ -128,8 +146,13 @@ class PagesController extends Controller
 
         $model = $this->pagesService->getForm(0, $page);
 
-        if ($model->load(App::$app->request->post()) && $model->validate()) {
+        $this->seoService->load($page);
+        $seoForm = $this->seoService->getForm();
+
+        if ($model->load(App::$app->request->post()) && $model->validate() && $seoForm->load(App::$app->request->post()) && $seoForm->validate()) {
             $page = $this->pagesService->save($model, $page);
+            $this->seoService->save($page);
+
             App::$app->getSession()->setFlash('success', Yii::t('pages', 'Page successful updated'));
 
             if ($page->section_id != 0) {
@@ -143,6 +166,7 @@ class PagesController extends Controller
             'model' => $model,
             'section' => $page->section,
             'sections' => $this->sectionsService->getSectionsTree(),
+            'seoService' => $this->seoService,
         ]);
     }
 

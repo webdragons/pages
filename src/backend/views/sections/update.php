@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
  * @var \bulldozer\pages\common\ar\Section $section
  * @var \bulldozer\pages\backend\forms\SectionForm $model
  * @var array $sections
+ * @var \bulldozer\seo\backend\services\SeoService $seoService
  */
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('pages', 'Pages'), 'url' => ['index']];
@@ -31,7 +32,7 @@ $this->title = Yii::t('pages', 'Update section: {name}', ['name' => $section->na
             </header>
 
             <div class="panel-body">
-                <?= $this->render('_form', ['model' => $model, 'isNew' => false, 'sections' => $sections]) ?>
+                <?= $this->render('_form', ['model' => $model, 'isNew' => false, 'sections' => $sections, 'seoService' => $seoService]) ?>
             </div>
         </section>
     </div>

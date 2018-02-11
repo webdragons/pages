@@ -3,6 +3,7 @@
 /**
  * @var \bulldozer\pages\frontend\ar\Page $page
  * @var \yii\web\View $this
+ * @var \bulldozer\seo\frontend\services\SeoService $seoService
  */
 
 if ($page->section) {
@@ -17,7 +18,12 @@ if ($page->section) {
 $this->params['breadcrumbs'][] = $page->name;
 ?>
 <div>
-    <h1 class="page-title"><?= $page->name ?></h1>
+    <h1><?= $seoService->getH1() ?></h1>
 
     <?=$page->body?>
+
+    <?php if (strlen($seoService->getSeoText())): ?>
+        <hr>
+        <?= $seoService->getSeoText() ?>
+    <?php endif ?>
 </div>
